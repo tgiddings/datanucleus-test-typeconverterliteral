@@ -1,5 +1,6 @@
 package org.datanucleus.test;
 
+import java.time.Year;
 import java.util.*;
 import org.junit.*;
 import javax.jdo.*;
@@ -22,7 +23,13 @@ public class SimpleTest
         {
             tx.begin();
 
-            // [INSERT code here to persist object required for testing]
+            Person person = new Person(1, "bob", Year.of(1999));
+            pm.makePersistent(person);
+
+            Person foundPerson = pm.newQuery(Person.class)
+                                   .filter("this.birthYear==:year")
+                                   .setParameters(Year.of(1999))
+                                   .executeUnique();
 
             tx.commit();
         }
